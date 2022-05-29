@@ -112,7 +112,7 @@ def all_names_by_house(filename):
     full_list = []
 
     hagworts_data = open(filename)
-    print(hagworts_data)
+    hagworts_data
 
     for line in hagworts_data:
       first, last, house, _, cohort = line.rstrip().split("|")
@@ -145,7 +145,7 @@ def all_names_by_house(filename):
 
     return full_list
 
-print(all_names_by_house("cohort_data.txt"))
+all_names_by_house("cohort_data.txt")
 
 def all_data(filename):
     """Return all the data in a file.
@@ -202,8 +202,16 @@ def get_cohort_for(filename, name):
       - str: the person's cohort or None
     """
 
-    # TODO: replace this with your code
+    hagworts_data = open(filename)
 
+    for data in hagworts_data:
+      first, last, _, _, cohort = data.rstrip().split("|")
+      full_name = f'{first} {last}'
+      if name == full_name:
+         return cohort
+      
+
+get_cohort_for("cohort_data.txt", "Dennis Creevey")
 
 def find_duped_last_names(filename):
     """Return a set of duplicated last names that exist in the data.
@@ -219,7 +227,21 @@ def find_duped_last_names(filename):
       - set[str]: a set of strings
     """
 
-    # TODO: replace this with your code
+    hagworts_data = open(filename)
+    
+    names = []
+
+    duplicates = []
+
+    for data in hagworts_data:
+      _, last, _, _, _ = data.rstrip().split("|")
+      if last not in names:
+        names.append(last)
+      elif last in names:
+        duplicates.append(last)
+    return set(duplicates)
+
+find_duped_last_names("cohort_data.txt")
 
 
 def get_housemates_for(filename, name):
@@ -234,21 +256,54 @@ def get_housemates_for(filename, name):
     {'Angelina Johnson', ..., 'Seamus Finnigan'}
     """
 
-    # TODO: replace this with your code
 
+    housemates = set()
+
+    for student in all_data(filename):
+      full_name, house, _, cohort = student
+
+      if full_name == name:
+        selected_student = student
+        selected_student_house = house
+        selected_student_cohort = cohort
+      
+        if selected_student:
+
+          for full_name, house, _, cohort in all_data(filename):
+            if house == selected_student_house and cohort == selected_student_cohort and full_name != name:
+              housemates.add(full_name)
+    return housemates
+
+sorted(get_housemates_for("cohort_data.txt", "Orla Quirke"))
 
 ##############################################################################
 # END OF MAIN EXERCISE.  Yay!  You did it! You Rock!
 #
 
-# if __name__ == '__main__':
-#     import doctest
+if __name__ == '__main__':
+    import doctest
 
-#     result = doctest.testfile('doctests.py',
-#                               report=False,
-#                               optionflags=(
-#                                   doctest.REPORT_ONLY_FIRST_FAILURE
-#                               ))
-#     doctest.master.summarize(1)
-#     if result.failed == 0:
-#         print('ALL TESTS PASSED')
+    result = doctest.testfile('doctests.py',
+                              report=False,
+                              optionflags=(
+                                  doctest.REPORT_ONLY_FIRST_FAILURE
+                              ))
+    doctest.master.summarize(1)
+    if result.failed == 0:
+        print('ALL TESTS PASSED')
+
+
+  # housemates = set()
+
+    # for line in hagworts_data:
+    #   first, last, house, _, cohort = line.rstrip().split("|")
+    #   full_name = f'{first} {last}'
+      
+    #   if name == full_name:
+    #     selected_student = full_name
+    #     student_house = house
+    #     student_cohort = cohort
+
+    #   for student in full_name, house, cohort:
+    #     if house == student_house and cohort == student_cohort and full_name != selected_student:
+    #       housemates.add(full_name)
